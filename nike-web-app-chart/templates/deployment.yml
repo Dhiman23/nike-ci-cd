@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nike-clone-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nike-clone
+  template:
+    metadata:
+      labels:
+        app: nike-clone
+    spec:
+      containers:
+      - name: nike-clone
+        image: sajaldhimanitc1999/nike-clone
+        ports:
+        - containerPort: 3000
