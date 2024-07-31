@@ -1,0 +1,10 @@
+
+/db
+/k8s
+Dockerfile
+jenkinsfile
+*.tf
+.gitignore
+
+.terraform/*
+.terraform.lock.hcl

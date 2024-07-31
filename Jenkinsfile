@@ -100,7 +100,7 @@ pipeline{
   stage(deploy){
        steps{
          script{
-        sh "docker run -d -p 8000:8000 sajaldhimanitc1999/nikeapp:latest"
+        sh "docker run -d -p 3000:3000 sajaldhimanitc1999/nikeapp:latest"
             }
 
          }
