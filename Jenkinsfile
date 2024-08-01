@@ -41,15 +41,17 @@ pipeline{
                     }
                 }
             }
-        }
-
         stage("Trivy fs"){
-            steps{
-                script{
+               steps{
+                  script{
                     sh 'trivy fs --format table -o file.html'
-                }
+                  }
             }
         }
+
+        }
+
+       
         
         stage("Sonar"){
     steps{
