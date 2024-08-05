@@ -1,0 +1,1 @@
+data "aws_availablity_zones" "azs" {}
