@@ -26,16 +26,16 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform Format
-        id: fmt
         run: terraform fmt -check
+        working-directory: /nike-ci-cd/eksTerra 
 
       - name: Terraform Init
-        id: init
         run: terraform init
+        working-directory: /nike-ci-cd/eksTerra 
 
       - name: Terraform Plan
-        id: plan
         run: terraform plan -no-color
+        working-directory: /nike-ci-cd/eksTerra 
 
     #   - name: Terraform Apply
     #     run: terraform apply -auto-approve
