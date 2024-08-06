@@ -27,15 +27,15 @@ jobs:
 
       - name: Terraform Format
         run: terraform fmt -check
-        working-directory: /nike-ci-cd/eksTerra 
+        working-directory: ./eksTerra 
 
       - name: Terraform Init
         run: terraform init
-        working-directory: /nike-ci-cd/eksTerra 
+        working-directory: ./eksTerra 
 
       - name: Terraform Plan
         run: terraform plan -no-color
-        working-directory: /nike-ci-cd/eksTerra 
+        working-directory: ./eksTerra 
 
     #   - name: Terraform Apply
     #     run: terraform apply -auto-approve
