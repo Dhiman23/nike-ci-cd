@@ -30,5 +30,3 @@ yarn-error.log*
 
 /eksTerra/.terrafrom
 /eksTerra/.terrafrom.lock.hcl
-
-
