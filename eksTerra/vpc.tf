@@ -4,7 +4,7 @@ module "vpc" {
   name = "eks-cluster"
   cidr = var.vpc_cidr
 
-  azs             = data.aws_availablity_zones.azs.names 
+  azs             = data.aws_availability_zones.azs.names 
   private_subnets = var.private_subnets
   public_subnets  = var.public_subnets
 
@@ -17,8 +17,15 @@ module "vpc" {
 
   }
   public_subnet_tags = {
-    "kubenetes.io/cluster/eks-cluster" = "shared"
-    "kubenetes.io/role/elb"            = 1
+    "kubernetes.io/cluster/eks-cluster" = "shared"
+    "kubernetes.io/role/elb"            = 1
   }
+
+   private_subnet_tags = {
+    "kubernetes.io/cluster/eks-cluster" = "shared"
+    "kubernetes.io/role/elb"            = 1
+  } 
+
+
 
 }

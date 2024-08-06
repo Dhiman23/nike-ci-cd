@@ -1,1 +1,2 @@
-data "aws_availablity_zones" "azs" {}
+data "aws_availability_zones" "azs" {}
+
