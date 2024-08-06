@@ -24,7 +24,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # Terraform
-.terraform/*
-.terraform.lock.hcl
+
+/serverTerra/.terrafrom
+/serverTerra/..terraform.lock.hcl
+
+/eksTerra/.terrafrom
+/eksTerra/.terrafrom.lock.hcl
 
 

@@ -1,6 +1,6 @@
 
 /k8s
-Dockerfile
+Dockerfilez
 jenkinsfile
 *.tf
 .gitignore
