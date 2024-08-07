@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - infra
+    paths-ignore:
+      - 'helm/**'
+      - 'K8s/**'
+      - 'serverTerra'
+      - 'README.md'
 
 jobs:
   terraform:
