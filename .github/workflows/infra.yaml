@@ -42,5 +42,5 @@ jobs:
         run: terraform plan -no-color
         working-directory: ./eksTerra 
 
-    #   - name: Terraform Apply
-    #     run: terraform apply -auto-approve 
+      - name: Terraform Apply
+        run: terraform apply -auto-approve 
