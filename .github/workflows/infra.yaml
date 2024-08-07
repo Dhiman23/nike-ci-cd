@@ -27,6 +27,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{secrets.AWS_REGION}}
 
+      - name: Terraform Format
+        run: terraform destory -y
+        working-directory: ./eksTerra
 
       - name: Terraform Format
         run: terraform fmt 
@@ -44,3 +47,4 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve 
+        working-directory: ./eksTerra
