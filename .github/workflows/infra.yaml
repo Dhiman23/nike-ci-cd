@@ -35,6 +35,8 @@ jobs:
       - name: Terraform Init
         run: terraform init
         working-directory: ./eksTerra 
+        env:
+          TF_LOG: DEBUG
 
       - name: Terraform Plan
         run: terraform plan -no-color
