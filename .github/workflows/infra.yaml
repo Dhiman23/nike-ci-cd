@@ -1,52 +1,62 @@
-name: "Terraform"
+name: terraform workflow
 
 on:
+  workflow_dispatch:
+    inputs:
+        action:
+            description: 'select action'
+            required: true
+            default: 'apply'
+            type: choice
+            options:
+              - apply
+              - destroy
   push:
     branches:
       - infra
     paths-ignore:
-      - 'helm/**'
-      - 'K8s/**'
-      - 'serverTerra'
-      - 'README.md'
+      - helm/**
+      - K8s/**
+      - serverTerra/**
+      - README.md
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: terraform
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+      
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.4.0
           terraform_wrapper: false
-
-      - name: configuration AWS credetials 
+      
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{secrets.AWS_REGION}}
-
-    
+          aws-region: ${{ secrets.AWS_REGION }}
+      
       - name: Terraform Format
         run: terraform fmt 
         working-directory: ./eksTerra 
-
+      
       - name: Terraform Init
         run: terraform init
-        working-directory: ./eksTerra 
-        env:
-          TF_LOG: DEBUG
-
-      - name: Terraform Plan
-        run: terraform plan -no-color
-        working-directory: ./eksTerra 
-
+        working-directory: ./eksTerra   
+  
+      
       - name: Terraform Apply
+        if: github.event.inputs.action == 'apply'
         run: terraform apply -auto-approve 
+        working-directory: ./eksTerra 
+      
+      
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve
+        if: github.event.inputs.action == 'destroy'
         working-directory: ./eksTerra
