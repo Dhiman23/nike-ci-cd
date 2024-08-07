@@ -1,10 +1,14 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
   name = "eks-cluster"
   cidr = var.vpc_cidr
 
-  azs             = data.aws_availability_zones.azs.names 
+  azs             = data.aws_availability_zones.azs.names
   private_subnets = var.private_subnets
   public_subnets  = var.public_subnets
 
