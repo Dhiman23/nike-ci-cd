@@ -3,14 +3,15 @@ name: terraform workflow
 on:
   workflow_dispatch:
     inputs:
-        action:
-            description: 'select action'
-            required: true
-            default: 'apply'
-            type: choice
-            options:
-              - apply
-              - destroy
+      action:
+        description: 'Select action'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
+
   push:
     branches:
       - infra
@@ -42,21 +43,19 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       
       - name: Terraform Format
-        run: terraform fmt 
-        working-directory: ./eksTerra 
+        run: terraform fmt
+        working-directory: ./eksTerra
       
       - name: Terraform Init
         run: terraform init
-        working-directory: ./eksTerra   
-  
+        working-directory: ./eksTerra
       
       - name: Terraform Apply
         if: github.event.inputs.action == 'apply'
-        run: terraform apply -auto-approve 
-        working-directory: ./eksTerra 
+        run: terraform apply -auto-approve
+        working-directory: ./eksTerra
       
-      
-      - name: Terraform destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform Destroy
         if: github.event.inputs.action == 'destroy'
+        run: terraform destroy -auto-approve
         working-directory: ./eksTerra
