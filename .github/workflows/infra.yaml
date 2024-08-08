@@ -54,6 +54,6 @@ jobs:
       - name: Terraform Apply
         if: ${{github.event.inputs.action}} == 'apply'
         run: terraform apply --auto-approve 
-        working-directory: ./eksTerra
+        working-directory: ./eksTerra  
       
      
