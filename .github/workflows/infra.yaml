@@ -51,9 +51,9 @@ jobs:
         run: terraform init
         working-directory: ./eksTerra
       
-      - name: Terraform Apply
+      - name: Terraform Destory
         if: ${{github.event.inputs.action}} == 'apply'
-        run: terraform apply -auto-approve
+        run: terraform Destory -auto-approve
         working-directory: ./eksTerra
       
      
