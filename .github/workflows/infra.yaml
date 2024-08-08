@@ -52,7 +52,7 @@ jobs:
         working-directory: ./eksTerra
       
       - name: Terraform Destory
-        if: ${{github.event.inputs.action}} == 'apply'
+        if: ${{github.event.inputs.action}} == 'Destroy'
         run: terraform Destory -auto-approve
         working-directory: ./eksTerra
       
