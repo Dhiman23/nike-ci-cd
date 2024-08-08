@@ -20,17 +20,15 @@ module "vpc" {
 
   tags = {
     "kubernetes.io/cluster/eks-cluster" = "shared"
-
   }
   public_subnet_tags = {
-    "kubenetes.io/cluster/eks-cluster" = "shared"
-    "kubenetes.io/role/elb"            = 1
+    "kubernetes.io/cluster/eks-cluster" = "shared"
+    "kubernetes.io/role/elb"            = "1"
   } 
   private_subnet_tags = {
-    "kubenetes.io/cluster/eks-cluster" = "shared"
-    "kubenetes.io/role/elb"            = 1
+    "kubernetes.io/cluster/eks-cluster" = "shared"
+    "kubernetes.io/role/internal-elb"   = "1"
   }
-
 }
 
 #EKS
@@ -45,20 +43,15 @@ module "eks" {
 
   eks_managed_node_groups = {
     nodes = {
-      
       instance_types = var.instance_types
-
       min_size     = 1
       max_size     = 1
       desired_size = 1
     }
   }
 
-  tags={
+  tags = {
     Environment = "dev"
-    Terraform = "true"
+    Terraform   = "true"
   }
-
-
 }
-
