@@ -25,9 +25,5 @@ yarn-error.log*
 
 # Terraform
 
-/serverTerra/.terrafrom
-/serverTerra/..terraform.lock.hcl
-
-/eksTerra/.terrafrom
-/eksTerra/.terrafrom.lock.hcl
-sajal
+.terrafrom
+terraform.lock.hcl

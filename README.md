@@ -7,7 +7,7 @@ This project is a ReactJS-based clone of the Nike ecommerce website. It aims to 
 
 
 # :placard: Diagram
-![ingress](https://github.com/mohsin-786/nike-clone-ingress/assets/109455638/40a14851-6bd7-4a9a-a507-d11baee573fe)
+![ingress](https://github.com/Dhiman23/nike-ci-cd/blob/infra/diagram.png)
 
 
 
