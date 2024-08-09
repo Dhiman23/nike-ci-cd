@@ -16,5 +16,5 @@ variable "sg-name" {
 }
 variable "vm-name" {
   description = "Name of the virtual machine"
-  type        = string
+  default = "monitor-server"
 }
