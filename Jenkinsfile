@@ -91,14 +91,7 @@ pipeline {
                 }
             }
         }
-        stage('deploy') {
-            steps {
-                script {
-                    sh "docker run -d -p 3000:3000 sajaldhimanitc1999/nikeapp:{{Build_Number}}"
-                }
-            }
-        }
-
+   
           stage('EKS Configure') {
             steps {
                 script {
