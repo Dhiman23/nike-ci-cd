@@ -98,6 +98,15 @@ pipeline {
                 }
             }
         }
+
+          stage('EKS Configure') {
+            steps {
+                script {
+                    sh "aws eks update-kubeconfig --name sajal-eks-clusters "
+                }
+            }
+        }
+
            stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "nike-ci-cd"
