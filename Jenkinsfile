@@ -7,6 +7,12 @@ pipeline {
         SCANNER_HOME = tool 'sonar-scanner'
     }
     stages {
+        stage('Clean WS') {
+            steps {
+                clean ws()
+        }
+
+
         stage('git checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/Dhiman23/nike-ci-cd.git'
@@ -63,10 +69,16 @@ pipeline {
             }
         }
         stage('docker image build') {
+
+     environment {
+          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+             REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t sajaldhimanitc1999/nikeapp:latest ."
+                        sh "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER} ."
                     }
                 }
             }
@@ -77,20 +89,48 @@ pipeline {
             }
         }
         stage('docker image push') {
+
+            environment {
+          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+             REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sajaldhimanitc1999/nikeapp:latest"
+                        sh "docker push sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
                     }
                 }
             }
         }
-        stage('deploy') {
+        
+          stage('EKS Configure') {
             steps {
                 script {
-                    sh "docker run -d -p 3000:3000 sajaldhimanitc1999/nikeapp:latest"
+                    sh "aws eks update-kubeconfig --name sajal-eks-clusters "
                 }
             }
         }
+
+           stage('Update Deployment File') {
+        environment {
+            GIT_REPO_NAME = "nike-ci-cd"
+            GIT_USER_NAME = "Dhiman23"
+        }
+        steps {
+            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    git config user.email "sajaldhiman68@gmail.com"
+                    git config user.name "Dhiman23"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
+                    git add nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                '''
+            }
+        }
+    }
+  }
     }
 }
