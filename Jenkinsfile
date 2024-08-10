@@ -69,10 +69,16 @@ pipeline {
             }
         }
         stage('docker image build') {
+
+     environment {
+          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+             REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t sajaldhimanitc1999/nikeapp:latest ."
+                        sh "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER} ."
                     }
                 }
             }
@@ -83,22 +89,21 @@ pipeline {
             }
         }
         stage('docker image push') {
+
+            environment {
+          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+             REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sajaldhimanitc1999/nikeapp:latest"
+                        sh "docker push sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
                     }
                 }
             }
         }
-        stage('deploy') {
-            steps {
-                script {
-                    sh "docker run -d -p 3000:3000 sajaldhimanitc1999/nikeapp:{{Build_Number}}"
-                }
-            }
-        }
-
+        
           stage('EKS Configure') {
             steps {
                 script {
