@@ -5,11 +5,13 @@ pipeline {
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+        VERSION = "${env.BUILD_NUMBER}"
     }
     stages {
-        stage('Clean WS') {
+        stage('Cleaning Workspace') {
             steps {
-                clean ws()
+                cleanWs()
+            }
         }
 
 
@@ -70,15 +72,10 @@ pipeline {
         }
         stage('docker image build') {
 
-     environment {
-          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-             REGISTRY_CREDENTIALS = credentials('docker-cred')
-      }
-            steps {
+       steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER} ."
+                        sh "docker build -t sajaldhimanitc1999/nikeapp:${VERSION} ."
                     }
                 }
             }
@@ -90,15 +87,11 @@ pipeline {
         }
         stage('docker image push') {
 
-            environment {
-          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-             REGISTRY_CREDENTIALS = credentials('docker-cred')
-      }
+    
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+                        sh "docker push sajaldhimanitc1999/nikeapp:${VERSION}"
                     }
                 }
             }
@@ -122,10 +115,10 @@ pipeline {
                 sh '''
                     git config user.email "sajaldhiman68@gmail.com"
                     git config user.name "Dhiman23"
-                    BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
+                    BUILD_NUMBER=${VERSION}
+                    sed -i "s/replaceImageTag/${VERSION}/g" nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
                     git add nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git commit -m "Update deployment image to version ${VERSION}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
             }
@@ -133,4 +126,4 @@ pipeline {
     }
   }
     }
-}
+
