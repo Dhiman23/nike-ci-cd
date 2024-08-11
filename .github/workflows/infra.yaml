@@ -21,6 +21,7 @@ on:
       - serverTerra/**
       - README.md
       - monitoringTerraConfig/**
+      - monitoring/*
 
 jobs:
   terraform:
