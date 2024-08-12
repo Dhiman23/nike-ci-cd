@@ -5,11 +5,13 @@ pipeline {
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+        VERSION = "${env.BUILD_NUMBER}"
     }
     stages {
-        stage('Clean WS') {
+        stage('Cleaning Workspace') {
             steps {
-                clean ws()
+                cleanWs()
+            }
         }
 
 
@@ -70,48 +72,32 @@ pipeline {
         }
         stage('docker image build') {
 
-     environment {
-          DOCKER_IMAGE = "sajaldhiman1999/nikeapp:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-             REGISTRY_CREDENTIALS = credentials('docker-cred')
-      }
-            steps {
+       steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "sajaldhiman1999/nikeapp:${BUILD_NUMBER} ."
+                        sh "docker build -t sajaldhiman1999/nikeapp:${VERSION} ."
                     }
                 }
             }
         }
         stage('trivy image scan') {
             steps {
-                sh "trivy image --format table -o trivy-image-report.html sajaldhiman1999/nikeapp:latest"
+                sh "trivy image --format table -o trivy-image-report.html sajaldhiman1999/nikeapp:${VERSION}"
             }
         }
         stage('docker image push') {
 
-            environment {
-          DOCKER_IMAGE = "sajaldhiman1999/nikeapp:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-             REGISTRY_CREDENTIALS = credentials('docker-cred')
-      }
+    
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sajaldhiman1999/nikeapp:${BUILD_NUMBER}"
+                        sh "docker push sajaldhiman1999/nikeapp:${VERSION}"
                     }
                 }
             }
         }
         
-          stage('EKS Configure') {
-            steps {
-                script {
-                    sh "aws eks update-kubeconfig --name sajal-eks-clusters "
-                }
-            }
-        }
-
+      
            stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "nike-ci-cd"
@@ -122,10 +108,10 @@ pipeline {
                 sh '''
                     git config user.email "sajaldhiman68@gmail.com"
                     git config user.name "Dhiman23"
-                    BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" nike-web-app-chart/templates/deployment.yml
+                    BUILD_NUMBER=${VERSION}
+                    sed -i "s/replaceImageTag/${VERSION}/g" nike-web-app-chart/templates/deployment.yml
                     git add nike-web-app-chart/templates/deployment.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git commit -m "Update deployment image to version ${VERSION}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
             }
@@ -133,4 +119,4 @@ pipeline {
     }
   }
     }
-}
+
