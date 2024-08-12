@@ -71,34 +71,34 @@ pipeline {
         stage('docker image build') {
 
      environment {
-          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+          DOCKER_IMAGE = "sajaldhiman1999/nikeapp:${BUILD_NUMBER}"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
              REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER} ."
+                        sh "sajaldhiman1999/nikeapp:${BUILD_NUMBER} ."
                     }
                 }
             }
         }
         stage('trivy image scan') {
             steps {
-                sh "trivy image --format table -o trivy-image-report.html sajaldhimanitc1999/nikeapp:latest"
+                sh "trivy image --format table -o trivy-image-report.html sajaldhiman1999/nikeapp:latest"
             }
         }
         stage('docker image push') {
 
             environment {
-          DOCKER_IMAGE = "sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+          DOCKER_IMAGE = "sajaldhiman1999/nikeapp:${BUILD_NUMBER}"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
              REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sajaldhimanitc1999/nikeapp:${BUILD_NUMBER}"
+                        sh "docker push sajaldhiman1999/nikeapp:${BUILD_NUMBER}"
                     }
                 }
             }
