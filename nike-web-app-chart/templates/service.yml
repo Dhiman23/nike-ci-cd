@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: nike-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - port: 3000
     targetPort: 3000
-    nodePort: 32000
   selector:
     app: nike-clone
