@@ -99,7 +99,7 @@ And then add the ADDRESS and HOSTS from the above command as in this example:
 
 # :man_technologist: Author
 
-- [@SiddharthThapa](https://github.com/SMThapa)
+- this project is Devopsified by SAJAL DHIMAN
 
 
 
