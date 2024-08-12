@@ -75,14 +75,14 @@ pipeline {
        steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t sajaldhimanitc1999/nikeapp:${VERSION} ."
+                        sh "docker build -t sajaldhiman1999/nikeapp:${VERSION} ."
                     }
                 }
             }
         }
         stage('trivy image scan') {
             steps {
-                sh "trivy image --format table -o trivy-image-report.html sajaldhimanitc1999/nikeapp:latest"
+                sh "trivy image --format table -o trivy-image-report.html sajaldhiman1999/nikeapp:latest"
             }
         }
         stage('docker image push') {
@@ -91,20 +91,13 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sajaldhimanitc1999/nikeapp:${VERSION}"
+                        sh "docker push sajaldhiman1999/nikeapp:${VERSION}"
                     }
                 }
             }
         }
         
-          stage('EKS Configure') {
-            steps {
-                script {
-                    sh "aws eks update-kubeconfig --name sajal-eks-clusters "
-                }
-            }
-        }
-
+      
            stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "nike-ci-cd"
@@ -116,8 +109,8 @@ pipeline {
                     git config user.email "sajaldhiman68@gmail.com"
                     git config user.name "Dhiman23"
                     BUILD_NUMBER=${VERSION}
-                    sed -i "s/replaceImageTag/${VERSION}/g" nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
-                    git add nike-web-app-chart/nike-web-app-chart/templates/deployment.yml
+                    sed -i "s/replaceImageTag/${VERSION}/g" nike-web-app-chart/templates/deployment.yml
+                    git add nike-web-app-chart/templates/deployment.yml
                     git commit -m "Update deployment image to version ${VERSION}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
