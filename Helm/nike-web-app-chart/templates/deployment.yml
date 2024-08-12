@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: nike-clone
-        image: sajaldhiman1999/nike-clone:replaceImageTag
+        image: sajaldhiman1999/nikeapp:replaceImageTag
         ports:
         - containerPort: 3000
