@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json .
 
-RUN yarm install
+RUN yarn install
 
 COPY . .
 
