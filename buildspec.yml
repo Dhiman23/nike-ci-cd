@@ -9,10 +9,11 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build:
     commands:
+      - 
       - echo log in to Amazon ECR...
       - aws --version
       - echo $AWS_DEFAULT_REGION
-      - (aws ecr get-login --no-include-email --region us-east-1)
+      - $(aws ecr get-login --no-include-email --region us-east-1)
       - REPOSITORY_URI=225989331269.dkr.ecr.us-east-1.amazonaws.com/sajaldhiman1999/nike-app
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
